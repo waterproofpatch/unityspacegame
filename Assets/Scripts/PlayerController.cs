@@ -80,7 +80,7 @@ public class PlayerController : MonoBehaviour
         }
         foreach (GameObject turret in turrets) {
             TurretRotation tr = turret.GetComponent<TurretRotation>();
-            tr.SetAimpoint(transform.position);
+            tr.SetAimpoint(transform);
         }
     }
 }

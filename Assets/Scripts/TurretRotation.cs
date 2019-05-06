@@ -38,7 +38,7 @@ namespace Turrets
       public bool showDebugRay = true;
 
       private Vector3 aimPoint;
-      public Transform aimPointTransform;
+      private Transform curTarget;
 
       private bool aiming = false;
       private bool atRest = false;
@@ -82,10 +82,10 @@ namespace Turrets
       /// <summary>
       /// Give the turret a position to aim at. If not idle, it will rotate to aim at this point.
       /// </summary>
-      public void SetAimpoint(Vector3 position)
+      public void SetAimpoint(Transform transform)
       {
          aiming = true;
-         aimPoint = position;
+         curTarget = transform;
       }
 
       /// <summary>
@@ -155,6 +155,9 @@ namespace Turrets
          if (turretBase != null)
          {
             // Note, the local conversion has to come from the parent.
+            if (curTarget) {
+               aimPoint = curTarget.position;
+            }
             Vector3 localTargetPos = transform.InverseTransformPoint(aimPoint);
             localTargetPos.y = 0.0f;
 
@@ -186,6 +189,9 @@ namespace Turrets
          if (turretBase != null && turretBarrels != null)
          {
             // Note, the local conversion has to come from the parent.
+            if (curTarget) {
+               aimPoint = curTarget.position;
+            }
             Vector3 localTargetPos = turretBase.InverseTransformPoint(aimPoint);
             localTargetPos.x = 0.0f;
 
