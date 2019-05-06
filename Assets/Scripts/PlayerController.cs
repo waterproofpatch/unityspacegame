@@ -2,6 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Turrets;
+/*
+contoller notes:
+JoystickButton0 - X
+JoystickButton1 - A
+JoystickButton2 - B
+JoystickButton3 - Y
+JoystickButton4  - LB
+JoystickButton5  - RB
+JoystickButton6  - LT
+JoystickButton7  - RT
+JoystickButton8 - back
+JoystickButton9 - start
+JoystickButton10 - left stick[not direction, button]
+JoystickButton11 - right stick[not direction, button]
+*/
 
 public class PlayerController : MonoBehaviour
 {
@@ -10,6 +25,9 @@ public class PlayerController : MonoBehaviour
     public List<GameObject> turrets;
 
     public int thrust = 10;
+    public float rollSensitivity = 10.0f;
+    public float yawSensitivity = 10.0f;
+    public float pitchSensitivity = 10.0f;
 
     void Start()
     {
@@ -24,31 +42,32 @@ public class PlayerController : MonoBehaviour
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);  // from mouse position
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit)) {
-                print("I clicked " + hit.transform.name);
+                print("Targeting " + hit.transform.name);
                 this.SetAimPointForControlledTurrets(hit.transform);
             }
         }
     }
     void FixedUpdate() {
         // thrust
-        if (Input.GetKey(KeyCode.W)) {
+        if (Input.GetKey(KeyCode.JoystickButton4)) {
             GetComponent<Rigidbody>().AddRelativeForce(transform.forward * thrust);
+            Debug.Log("Thrusting forward");
         }
-        if (Input.GetKey(KeyCode.S)) {
+        if (Input.GetKey(KeyCode.JoystickButton5)) {
             GetComponent<Rigidbody>().AddRelativeForce(transform.forward * (thrust * -1));
+            Debug.Log("Thrusting back");
         }
 
-        float thrust = -Input.GetKey("Thrust") * Time.deltaTime * 20.0f;
-        Debug.Log("Thrust is "  + thrust)
-        float pitch = -Input.GetAxis("Vertical") * Time.deltaTime * 20.0f;
+        // pitch
+        float pitch = -Input.GetAxis("Vertical") * Time.deltaTime * pitchSensitivity;
+
+        // check modifier, roll or yaw accordingly
         float roll = 0.0f;
         float yaw = 0.0f;
-
-        // check modifier
-        if (Input.GetKey(KeyCode.R)) {
-            roll = -Input.GetAxis("Horizontal") * Time.deltaTime * 20.0f;
+        if (Input.GetKey(KeyCode.JoystickButton0)) {
+            roll = -Input.GetAxis("Horizontal") * Time.deltaTime * rollSensitivity;
         } else  {
-            yaw = Input.GetAxis("Horizontal") * Time.deltaTime * 20.0f;
+            yaw = Input.GetAxis("Horizontal") * Time.deltaTime * yawSensitivity;
         }
  
         Vector3 keyboardRot = new Vector3(pitch, yaw, roll);
@@ -61,7 +80,6 @@ public class PlayerController : MonoBehaviour
         }
         foreach (GameObject turret in turrets) {
             TurretRotation tr = turret.GetComponent<TurretRotation>();
-            Debug.Log("Setting aimpoint...");
             tr.SetAimpoint(transform.position);
         }
     }
