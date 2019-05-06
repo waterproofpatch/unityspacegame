@@ -44,13 +44,13 @@ public class PlayerController : MonoBehaviour
 
         // check modifier
         if (Input.GetKey(KeyCode.R)) {
-            roll = Input.GetAxis("Horizontal") * Time.deltaTime * 10.0f;
+            roll = -Input.GetAxis("Horizontal") * Time.deltaTime * 20.0f;
         } else  {
             yaw = Input.GetAxis("Horizontal") * Time.deltaTime * 20.0f;
         }
  
         Vector3 keyboardRot = new Vector3(pitch, yaw, roll);
-        transform.Rotate(keyboardRot);
+        GetComponent<Rigidbody>().AddRelativeTorque(keyboardRot);
     }
 
     void SetAimPointForControlledTurrets(Transform transform) {
