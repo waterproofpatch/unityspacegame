@@ -38,6 +38,8 @@ public class PlayerController : MonoBehaviour
             GetComponent<Rigidbody>().AddRelativeForce(transform.forward * (thrust * -1));
         }
 
+        float thrust = -Input.GetKey("Thrust") * Time.deltaTime * 20.0f;
+        Debug.Log("Thrust is "  + thrust)
         float pitch = -Input.GetAxis("Vertical") * Time.deltaTime * 20.0f;
         float roll = 0.0f;
         float yaw = 0.0f;
