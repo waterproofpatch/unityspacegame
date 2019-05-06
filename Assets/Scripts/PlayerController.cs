@@ -50,11 +50,11 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate() {
         // thrust
         if (Input.GetKey(KeyCode.JoystickButton4)) {
-            GetComponent<Rigidbody>().AddRelativeForce(transform.forward * thrust);
+            GetComponent<Rigidbody>().AddRelativeForce(Vector3.forward * thrust);
             Debug.Log("Thrusting forward");
         }
         if (Input.GetKey(KeyCode.JoystickButton5)) {
-            GetComponent<Rigidbody>().AddRelativeForce(transform.forward * (thrust * -1));
+            GetComponent<Rigidbody>().AddRelativeForce(Vector3.forward * (thrust * -1));
             Debug.Log("Thrusting back");
         }
 
