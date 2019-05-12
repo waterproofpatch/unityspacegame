@@ -78,6 +78,9 @@ namespace Turrets
             RotateTurret();
          }
       }
+       public void Fire() {
+
+       }
 
       /// <summary>
       /// Give the turret a position to aim at. If not idle, it will rotate to aim at this point.

@@ -23,8 +23,6 @@ JoystickButton11 - right stick[not direction, button]
 
 public class PlayerController : MonoBehaviour
 {
-    // turrets that we aim when we click on something
-    public TurretRotation turret;
 
     // rigidbody sensitivity/modifies to apply on inputs
     public int thrust = 10;
@@ -34,6 +32,8 @@ public class PlayerController : MonoBehaviour
 
     // the physics object we move when we thrust
     private Rigidbody rb;
+    // turrets that we aim when we click on something
+    private TurretRotation turret;
 
     void Start()
     {
@@ -87,9 +87,8 @@ public class PlayerController : MonoBehaviour
         }
 
         if (Input.GetKey(KeyCode.Space)) {
-            Debug.Log("Slowing...");
-            this.rb.velocity = this.rb.velocity * 0.9f;
-            this.rb.angularVelocity = this.rb.angularVelocity * 0.9f;
+            Debug.Log("Shooting...");
+            Fire();
         }
 
         // pitch
@@ -122,5 +121,9 @@ public class PlayerController : MonoBehaviour
             return;
         }
         turret.SetAimpoint(transform);
+    }
+
+    void Fire() {
+        this.turret.Fire();
     }
 }
