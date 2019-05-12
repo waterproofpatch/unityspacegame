@@ -69,8 +69,8 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        float newAxisInput = Input.GetAxis("NewAxis");
-        Debug.Log("NewAxis has " + newAxisInput);
+        //float newAxisInput = Input.GetAxis("NewAxis");
+        //Debug.Log("NewAxis has " + newAxisInput);
 
         // thrust
         if (Input.GetKey(KeyCode.JoystickButton4))
@@ -78,10 +78,18 @@ public class PlayerController : MonoBehaviour
             GetComponent<Rigidbody>().AddRelativeForce(Vector3.forward * thrust);
             Debug.Log("Thrusting forward");
         }
-        if (Input.GetKey(KeyCode.JoystickButton5))
+        else if (Input.GetKey(KeyCode.JoystickButton5))
         {
             GetComponent<Rigidbody>().AddRelativeForce(Vector3.forward * (thrust * -1));
             Debug.Log("Thrusting back");
+        } else {
+            this.rb.velocity = this.rb.velocity * 0.9f;
+        }
+
+        if (Input.GetKey(KeyCode.Space)) {
+            Debug.Log("Slowing...");
+            this.rb.velocity = this.rb.velocity * 0.9f;
+            this.rb.angularVelocity = this.rb.angularVelocity * 0.9f;
         }
 
         // pitch
@@ -99,9 +107,10 @@ public class PlayerController : MonoBehaviour
             yaw = Input.GetAxis("Horizontal") * Time.deltaTime * yawSensitivity;
         }
 
-        //Debug.Log("Pitch " + pitch);
-        //Debug.Log("Roll " + roll);
-        //Debug.Log("Yaw " + roll);
+        Debug.Log("Pitch " + pitch + " Roll " + roll + " Yaw " + yaw + " AV " + this.rb.angularVelocity + " V " + this.rb.velocity);
+        if (yaw == 0 && pitch == 0 && roll == 0) {
+            this.rb.angularVelocity = this.rb.angularVelocity * 0.9f;
+        }
         Vector3 keyboardRot = new Vector3(pitch, yaw, roll);
         this.rb.AddRelativeTorque(keyboardRot);
     }
