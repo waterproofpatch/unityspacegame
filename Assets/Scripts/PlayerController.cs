@@ -41,9 +41,32 @@ public class PlayerController : MonoBehaviour
         this.turret = GetComponentInChildren<TurretRotation>();
     }
 
+    GameObject FindClosestEnemy() {
+        GameObject[] gos;
+        gos = GameObject.FindGameObjectsWithTag("EnemyBlock");
+        GameObject closest = null;
+        float distance = Mathf.Infinity;
+        Vector3 position = transform.position;
+        foreach (GameObject go in gos)
+        {
+            Vector3 diff = go.transform.position - position;
+            float curDistance = diff.sqrMagnitude;
+            if (curDistance < distance)
+            {
+                closest = go;
+                distance = curDistance;
+            }
+        }
+        return closest;
+    }
+
     // Update is called once per frame
     void Update()
     {
+        GameObject enemy = FindClosestEnemy();
+        if (enemy) {
+                this.SetAimPointForControlledTurrets(enemy.transform);
+        }
         if (Input.GetMouseButtonDown(0))
         {
             // Ray ray = cam.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0)); // from camera center position
@@ -106,7 +129,7 @@ public class PlayerController : MonoBehaviour
             yaw = Input.GetAxis("Horizontal") * Time.deltaTime * yawSensitivity;
         }
 
-        Debug.Log("Pitch " + pitch + " Roll " + roll + " Yaw " + yaw + " AV " + this.rb.angularVelocity + " V " + this.rb.velocity);
+        //Debug.Log("Pitch " + pitch + " Roll " + roll + " Yaw " + yaw + " AV " + this.rb.angularVelocity + " V " + this.rb.velocity);
         if (yaw == 0 && pitch == 0 && roll == 0) {
             this.rb.angularVelocity = this.rb.angularVelocity * 0.9f;
         }

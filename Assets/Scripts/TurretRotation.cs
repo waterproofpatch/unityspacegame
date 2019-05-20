@@ -6,6 +6,9 @@ namespace Turrets
    {
       [Tooltip("Should turret rotate in the FixedUpdate rather than Update?")]
       public bool runRotationsInFixed = false;
+      [Header("Distances")]
+      [Tooltip("Max target distance")]
+      public float maxTargetDistance = 100;
 
       [Header("Objects")]
       [Tooltip("Transform used to provide the horizontal rotation of the turret.")]
@@ -142,6 +145,13 @@ namespace Turrets
       {
          if (aiming)
          {
+            Vector3 diff = curTarget.transform.position - transform.position;
+            float curDistance = diff.sqrMagnitude;
+            if (curDistance > this.maxTargetDistance) {
+               Debug.Log("Target is too far away, detargeting");
+               SetIdle(true);
+               return;
+            }
             RotateBase();
             RotateBarrels();
          }
