@@ -88,21 +88,24 @@ namespace Turrets
       /// <summary>
       /// Give the turret a position to aim at. If not idle, it will rotate to aim at this point.
       /// </summary>
-      public void SetAimpoint(Transform transform)
+      public void SetAimpoint(Transform targetTransform)
       {
+         Vector3 diff = targetTransform.position - transform.position;
+         float curDistance = diff.sqrMagnitude;
+         if (curDistance > this.maxTargetDistance) {
+            return;
+         }
          aiming = true;
-         curTarget = transform;
+         curTarget = targetTransform;
       }
 
       /// <summary>
       /// When idle, turret returns to resting position, will not track an aimpoint, and rotations stop updating.
       /// </summary>
-      public void SetIdle(bool idle)
+      public void SetIdle()
       {
-         aiming = !idle;
-
-         if (aiming)
-            atRest = false;
+         aiming = false;
+         atRest = false;
       }
 
       /// <summary>
@@ -148,8 +151,7 @@ namespace Turrets
             Vector3 diff = curTarget.transform.position - transform.position;
             float curDistance = diff.sqrMagnitude;
             if (curDistance > this.maxTargetDistance) {
-               Debug.Log("Target is too far away, detargeting");
-               SetIdle(true);
+               SetIdle();
                return;
             }
             RotateBase();
@@ -157,6 +159,7 @@ namespace Turrets
          }
          else if (!atRest)
          {
+            Debug.Log("Rotate idle");
             atRest = RotateToIdle();
          }
       }
