@@ -78,6 +78,11 @@ public class PlayerController : MonoBehaviour
                 this.SetAimPointForControlledTurrets(hit.transform);
             }
         }
+
+        if (Input.GetKeyDown(KeyCode.Space)) {
+            Debug.Log("Shooting...");
+            Fire();
+        }
     }
     void OnCollisionEnter(Collision collision)
     {
@@ -107,11 +112,6 @@ public class PlayerController : MonoBehaviour
             Debug.Log("Thrusting back");
         } else {
             this.rb.velocity = this.rb.velocity * 0.9f;
-        }
-
-        if (Input.GetKey(KeyCode.Space)) {
-            Debug.Log("Shooting...");
-            Fire();
         }
 
         // pitch

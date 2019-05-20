@@ -40,6 +40,9 @@ namespace Turrets
       [Tooltip("When game is running in editor, draws a debug ray to show where the turret is aiming.")]
       public bool showDebugRay = true;
 
+      public GameObject firePoint1 = null;
+      public GameObject firePoint2 = null;
+
       private Vector3 aimPoint;
       private Transform curTarget;
 
@@ -82,7 +85,10 @@ namespace Turrets
          }
       }
        public void Fire() {
-
+          ParticleSystem[] ps = GetComponentsInChildren<ParticleSystem>();
+          foreach(ParticleSystem p in ps) {
+             p.Play();
+          }
        }
 
       /// <summary>
